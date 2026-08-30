@@ -60,6 +60,7 @@ export function createScene(canvas) {
   let targetProgress = 0;
   let theme = null;
   let orbit = 0;
+  let zoom = 1;
   let matrixSize = 25;
   let petalData = [];
   let time = 0;
@@ -308,7 +309,6 @@ export function createScene(canvas) {
 
   function updatePetals(dt) {
     if (!world || !world.petalMesh.visible) return;
-    const half = matrixSize / 2;
     petalData.forEach((p, i) => {
       p.position[1] -= p.fallSpeed * dt;
       const sway = Math.sin(time * p.swaySpeed + p.swayPhase) * p.swayAmount;
@@ -325,7 +325,6 @@ export function createScene(canvas) {
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       world.petalMesh.setMatrixAt(i, dummy.matrix);
-      void half;
     });
     world.petalMesh.instanceMatrix.needsUpdate = true;
   }
@@ -337,7 +336,7 @@ export function createScene(canvas) {
     const fovRad = THREE.MathUtils.degToRad(camera.fov);
 
     // Distance needed for the whole code to fit, whichever axis is tighter.
-    const span = matrixSize + 2.4;
+    const span = matrixSize + 8; // 4-module quiet zone each side, per spec
     const fitV = span / 2 / Math.tan(fovRad / 2);
     const fitH = fitV / Math.min(aspect, 1.6);
     const topDist = Math.max(fitV, fitH) * 1.02;
@@ -347,7 +346,7 @@ export function createScene(canvas) {
     const treeHeight = world?.tree.height ?? 0;
     const isoSpan = Math.max(span, treeHeight * 1.5);
     const isoFitV = isoSpan / 2 / Math.tan(fovRad / 2);
-    const isoDist = Math.max(isoFitV, isoFitV / Math.min(aspect, 1.6)) * 1.06;
+    const isoDist = Math.max(isoFitV, isoFitV / Math.min(aspect, 1.6)) * 1.06 * zoom;
     const isoY = Math.sin(0.62) * isoDist;
     const isoR = Math.cos(0.62) * isoDist;
 
@@ -382,6 +381,14 @@ export function createScene(canvas) {
   };
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
+  canvas.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault();
+      zoom = THREE.MathUtils.clamp(zoom * Math.exp(e.deltaY * 0.0015), 0.45, 2.5);
+    },
+    { passive: false }
+  );
 
   function resize() {
     const w = canvas.clientWidth;
@@ -393,7 +400,6 @@ export function createScene(canvas) {
   }
 
   const clock = new THREE.Clock();
-  let onProgress = null;
 
   function tick() {
     const dt = Math.min(clock.getDelta(), 0.05);
@@ -402,7 +408,6 @@ export function createScene(canvas) {
     if (Math.abs(targetProgress - progress) > 0.0005) {
       progress += (targetProgress - progress) * Math.min(1, dt * 4.5);
       applyProgress(progress);
-      onProgress?.(progress);
     }
 
     if (!dragging && progress < 0.02) orbit += dt * 0.09;
@@ -417,18 +422,12 @@ export function createScene(canvas) {
     build,
     resize,
     start: tick,
-    setProgress: (p) => {
-      targetProgress = THREE.MathUtils.clamp(p, 0, 1);
-    },
     toggle: () => {
       targetProgress = targetProgress > 0.5 ? 0 : 1;
       return targetProgress;
     },
     get progress() {
       return progress;
-    },
-    set onProgress(fn) {
-      onProgress = fn;
     },
     renderer,
     scene,

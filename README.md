@@ -68,6 +68,18 @@ the page needs to be served over HTTP because import maps don't work from
 
 ## Files
 
+Dependencies point one way — nothing below knows about anything above it:
+
+```mermaid
+graph LR
+  qr[js/qr.js<br/>encoder] --> tree[js/tree.js<br/>tree data]
+  random[js/random.js<br/>seeded PRNG] --> tree
+  tree --> scene[js/scene.js<br/>Three.js]
+  seasons[js/seasons.js] --> app[js/app.js<br/>DOM + URL state]
+  qr --> app
+  scene --> app
+```
+
 | File | Job |
 | --- | --- |
 | `js/qr.js` | QR encoding. No dependencies. |

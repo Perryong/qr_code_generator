@@ -129,6 +129,11 @@ button {
 
 /* ── Control panel ─────────────────────────────────────────────────────── */
 
+body[data-flat='true'] .panel {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .panel {
   position: fixed;
   top: 22px;
@@ -142,6 +147,26 @@ button {
   background: rgba(255, 253, 248, 0.9);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 34px rgba(60, 48, 30, 0.09);
+}
+
+.panel summary {
+  margin: -18px -18px 12px;
+  padding: 12px 18px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+
+.panel:not([open]) {
+  overflow: hidden;
+}
+
+.panel:not([open]) summary {
+  margin-bottom: -18px;
 }
 
 .field label,

@@ -9,6 +9,7 @@
       content="Turn a link into a small 3D landscape whose terrain is the QR code itself. Flatten it to scan. Runs entirely in the browser."
     />
     <meta name="theme-color" content="#f6f1e7" />
+    <link rel="icon" href="data:," />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,7 +39,8 @@
     <button id="flatten" class="flatten" type="button" aria-pressed="false">Flatten to scan</button>
     <p id="hint" class="hint"></p>
 
-    <section class="panel" aria-label="Controls">
+    <details class="panel" open>
+      <summary>Controls</summary>
       <form id="link-form" class="field" autocomplete="off">
         <label for="link-input">Link</label>
         <div class="field__row">
@@ -84,7 +86,7 @@
         Everything runs in this page — the link is never sent anywhere. For print, payments or
         anything load-bearing, use a plain QR code and test it first.
       </p>
-    </section>
+    </details>
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

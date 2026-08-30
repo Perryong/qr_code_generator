@@ -132,6 +132,7 @@ function setFlattenLabel(p) {
   const flat = p > 0.5;
   flattenBtn.textContent = flat ? 'Back to the tree' : 'Flatten to scan';
   flattenBtn.setAttribute('aria-pressed', String(flat));
+  document.body.dataset.flat = flat;
   hintEl.textContent = flat
     ? 'Point a camera at the screen to scan.'
     : 'Tap the scene to flatten it into a scannable code.';
@@ -140,7 +141,7 @@ function setFlattenLabel(p) {
 flattenBtn.addEventListener('click', () => setFlattenLabel(scene.toggle()));
 canvas.addEventListener('click', () => setFlattenLabel(scene.toggle()));
 window.addEventListener('keydown', (e) => {
-  if (e.key === ' ' && document.activeElement !== input) {
+  if (e.key === ' ' && !e.target.matches('input, button, select')) {
     e.preventDefault();
     setFlattenLabel(scene.toggle());
   }

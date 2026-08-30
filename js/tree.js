@@ -55,8 +55,8 @@ export function growTree(modules, options = {}) {
   const rand = makeRandom(seed);
 
   const depth = options.depth ?? 6;
-  const trunkHeight = options.trunkHeight ?? size * 0.13;
-  const trunkRadius = options.trunkRadius ?? size * 0.016;
+  const trunkHeight = options.trunkHeight ?? size * 0.2;
+  const trunkRadius = options.trunkRadius ?? size * 0.024;
 
   const branches = [];
   const blossoms = [];
