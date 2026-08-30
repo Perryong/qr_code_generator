@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
-# Trigger: only AFTER a PR into `main` is merged
+# Trigger: anything landing on `main` (a merged PR is a push to main).
+# The github-pages environment only accepts deploys from main, so this
+# must run on the main ref rather than the PR-closed event.
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches: [main]
 
 permissions:
@@ -13,7 +14,6 @@ permissions:
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment:
       name: github-pages
