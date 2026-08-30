@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>QR Tree — a link that grows</title>
+    <meta
+      name="description"
+      content="Turn a link into a small 3D landscape whose terrain is the QR code itself. Flatten it to scan. Runs entirely in the browser."
+    />
+    <meta name="theme-color" content="#f6f1e7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/app.css" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.164.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.164.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <canvas id="scene" aria-label="A tree growing from a QR code"></canvas>
+
+    <header class="masthead">
+      <h1>QR&nbsp;Tree</h1>
+      <p>The ground is the code.</p>
+    </header>
+
+    <button id="flatten" class="flatten" type="button" aria-pressed="false">Flatten to scan</button>
+    <p id="hint" class="hint"></p>
+
+    <section class="panel" aria-label="Controls">
+      <form id="link-form" class="field" autocomplete="off">
+        <label for="link-input">Link</label>
+        <div class="field__row">
+          <input
+            id="link-input"
+            type="text"
+            inputmode="url"
+            placeholder="https://example.com"
+            spellcheck="false"
+          />
+          <button type="submit">Grow</button>
+        </div>
+        <p id="error" class="error" role="alert" hidden></p>
+      </form>
+
+      <div class="group">
+        <span class="group__label">Season</span>
+        <div id="seasons" class="chips"></div>
+      </div>
+
+      <div class="group">
+        <span class="group__label">Palette</span>
+        <div id="palettes" class="chips"></div>
+      </div>
+
+      <div class="group group--inline">
+        <label class="group__label" for="ecc">Error correction</label>
+        <select id="ecc">
+          <option value="L">L — smallest</option>
+          <option value="M">M — balanced</option>
+          <option value="Q">Q — sturdy</option>
+          <option value="H">H — toughest</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button id="copy" type="button">Copy share link</button>
+        <button id="download" type="button">Download PNG</button>
+      </div>
+
+      <p id="stats" class="stats"></p>
+      <p class="note">
+        Everything runs in this page — the link is never sent anywhere. For print, payments or
+        anything load-bearing, use a plain QR code and test it first.
+      </p>
+    </section>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
